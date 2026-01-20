@@ -1,5 +1,4 @@
-# LangGraph + FastAPI AI Agent Demo
-
+# LangGraph + FastAPI AI Agent 
 > 一个基于 **LangGraph 状态机** 与 **FastAPI** 的 AI Agent 后端示例项目  
 > 支持 **多轮对话、会话隔离、对话历史持久化**  
 > 本项目主要用于 **AI Agent 技术学习与面试展示**
