@@ -1,32 +1,36 @@
-# LangGraph + FastAPI AI Agent 
+# LangGraph + FastAPI AI Agent
+
 > 一个基于 **LangGraph 状态机** 与 **FastAPI** 的 AI Agent 后端示例项目  
 > 支持 **多轮对话、会话隔离、对话历史持久化**  
-> 本项目主要用于 **AI Agent 技术学习与面试展示**
+> 本项目用于 **AI Agent 技术学习、工程实践与面试展示**
 
 ---
 
-## 📌 项目背景与学习动机
+## 🧠 项目背景与学习动机
 
-在学习 AI Agent 相关技术时，我发现：
-- 仅使用 LangChain 的 `Chain` 更偏“线性调用”
-- 而真实 Agent 系统更接近 **“有状态、有流程控制的系统”**
+在学习大模型应用开发过程中，我逐渐意识到：
 
-因此我选择：
-- 使用 **LangGraph** 构建 Agent 状态机
-- 使用 **FastAPI** 对外提供标准化 API
-- 尝试将「Agent 逻辑」与「Web 服务」进行工程化拆分
+- 传统基于 LangChain 的 `Chain` 更偏向**线性流程**
+- 而真实 AI Agent 更像一个 **有状态、有流程控制的系统**
 
-本项目的目标不是做复杂功能，而是**把 Agent 的核心思想真正跑通**。
+因此，本项目尝试使用 **LangGraph** 构建 Agent 的状态机结构，并通过 **FastAPI** 对外提供服务接口，  
+重点关注以下能力的理解与实践：
+
+- Agent 状态如何定义与流转
+- 多轮对话与会话隔离如何实现
+- 如何将 Agent 能力进行工程化封装
+
+本项目的目标不是做复杂功能，而是 **真正跑通 Agent 的核心设计思想**。
 
 ---
 
-## 🧠 项目核心能力
+## ✨ 项目核心能力
 
 - ✅ 基于 **LangGraph StateGraph** 的 Agent 状态建模
-- ✅ 支持 **多轮对话 & 会话隔离（thread_id）**
+- ✅ 支持 **多轮对话 / 会话隔离（thread_id）**
 - ✅ 使用 **MemorySaver** 实现对话历史持久化
-- ✅ 封装为 **FastAPI 服务**，便于前后端 / 系统集成
-- ✅ 清晰的工程目录结构，方便扩展为复杂 Agent
+- ✅ 封装为 **FastAPI API 服务**，便于系统集成
+- ✅ 清晰的工程目录拆分，便于后续扩展复杂 Agent
 
 ---
 
@@ -35,14 +39,14 @@
 ```text
 .
 ├── app/
-│   ├── main.py        # FastAPI 启动入口 & 接口定义
-│   ├── graph.py       # LangGraph 状态图构建逻辑
-│   ├── nodes.py       # Agent 各执行节点（如 LLM 调用）
+│   ├── main.py        # FastAPI 启动入口 & API 定义
+│   ├── graph.py       # LangGraph 状态图构建
+│   ├── nodes.py       # Agent 执行节点（LLM 调用等）
 │   ├── state.py       # AgentState 状态结构定义
 │   ├── service.py     # AIAssistant 业务封装层
-│   ├── config.py      # 环境变量 / 配置加载
+│   ├── config.py      # 环境变量与配置加载
 │   └── __init__.py
 ├── requirements.txt   # 项目依赖
-├── .env.example       # 环境变量示例（不含真实 Key）
+├── .env.example       # 环境变量示例（不包含真实 Key）
 ├── .gitignore
 └── README.md
