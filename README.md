@@ -47,6 +47,5 @@
 │   ├── config.py      # 环境变量与配置加载
 │   └── __init__.py
 ├── requirements.txt   # 项目依赖
-├── .env.example       # 环境变量示例（不包含真实 Key）
 ├── .gitignore
 └── README.md
