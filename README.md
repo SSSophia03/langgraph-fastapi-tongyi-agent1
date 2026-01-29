@@ -38,14 +38,24 @@
 
 ```text
 .
-├── app/
-│   ├── main.py        # FastAPI 启动入口 & API 定义
-│   ├── graph.py       # LangGraph 状态图构建
-│   ├── nodes.py       # Agent 执行节点（LLM 调用等）
-│   ├── state.py       # AgentState 状态结构定义
-│   ├── service.py     # AIAssistant 业务封装层
-│   ├── config.py      # 环境变量与配置加载
-│   └── __init__.py
-├── requirements.txt   # 项目依赖
-├── .gitignore
-└── README.md
+tongyi-agent-platform/
+├── backend/                # 后端代码 (FastAPI + LangGraph)
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── main.py         # 入口文件：配置CORS、流式路由
+│   │   ├── graph.py        # LangGraph 状态机定义
+│   │   ├── nodes.py        # 业务逻辑节点
+│   │   ├── state.py        # 状态定义
+│   │   ├── service.py      # 逻辑封装
+│   │   └── config.py       # 环境变量与模型配置
+│   ├── Dockerfile          # 容器化定义
+│   └── requirements.txt    # 依赖清单
+├── frontend/               # 前端代码 (Vue 3 + Vite + Tailwind)
+│   ├── src/
+│   │   ├── components/     # 聊天气泡、状态显示组件
+│   │   ├── App.vue         # 核心逻辑：SSE流式接收
+│   │   └── main.js
+│   ├── index.html
+│   ├── package.json
+│   └── tailwind.config.js
+└── docker-compose.yml      # 一键启动脚本
