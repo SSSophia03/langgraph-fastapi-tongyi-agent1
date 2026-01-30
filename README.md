@@ -1,61 +1,126 @@
-# LangGraph + FastAPI AI Agent
+# 智能体开发平台：基于 LangGraph 与 FastAPI 的 RAG 混合驱动 Agent
 
-> 一个基于 **LangGraph 状态机** 与 **FastAPI** 的 AI Agent 后端示例项目  
-> 支持 **多轮对话、会话隔离、对话历史持久化**  
-> 本项目用于 **AI Agent 技术学习、工程实践与面试展示**
+> **项目定位**：本项目是一个深度集成 **LangGraph 状态机编排**、**FastAPI 异步流式框架**与 **Vue3 响应式前端**的 AI Agent 全栈工程。旨在解决传统线性 LLM 应用无法处理复杂循环逻辑、缺乏长期记忆及工具调用过程不透明的问题。
 
 ---
 
-## 🧠 项目背景与学习动机
+## 🌟 核心亮点 (实习面试核心谈资)
 
-在学习大模型应用开发过程中，我逐渐意识到：
+1. **确定性状态机编排 (LangGraph)**：
+* 拒绝不可控的 `AutoGPT` 模式，采用 `StateGraph` 定义 Agent 决策边界。
+* 实现 **循环（Cycle）逻辑**：当 LLM 发现工具返回结果不足以回答问题时，会自动触发多轮工具调用，直到获取最终答案。
 
-- 传统基于 LangChain 的 `Chain` 更偏向**线性流程**
-- 而真实 AI Agent 更像一个 **有状态、有流程控制的系统**
 
-因此，本项目尝试使用 **LangGraph** 构建 Agent 的状态机结构，并通过 **FastAPI** 对外提供服务接口，  
-重点关注以下能力的理解与实践：
+2. **异步持久化与会话隔离**：
+* 基于 `AsyncSqliteSaver` 实现高性能异步 Checkpointer。
+* 通过 `thread_id` 物理隔离不同用户的对话上下文，支持断点续传式的状态恢复。
 
-- Agent 状态如何定义与流转
-- 多轮对话与会话隔离如何实现
-- 如何将 Agent 能力进行工程化封装
 
-本项目的目标不是做复杂功能，而是 **真正跑通 Agent 的核心设计思想**。
+3. **多路动态路由工具链**：
+* **私有知识 RAG**：集成 ChromaDB 向量库，通过语义检索提取企业内部文档（如员工手册）。
+* **实时联网搜索**：集成 Tavily Search API，弥补大模型训练数据的时效性空缺。
+* **实时状态感知**：自定义系统时间感知工具，解决模型对“今天”等时效词汇的认知障碍。
 
----
 
-## ✨ 项目核心能力
-
-- ✅ 基于 **LangGraph StateGraph** 的 Agent 状态建模
-- ✅ 支持 **多轮对话 / 会话隔离（thread_id）**
-- ✅ 使用 **MemorySaver** 实现对话历史持久化
-- ✅ 封装为 **FastAPI API 服务**，便于系统集成
-- ✅ 清晰的工程目录拆分，便于后续扩展复杂 Agent
+4. **工程化流式 UX (SSE)**：
+* 前端支持 **“深度思考”过程展示**：实时解析并渲染 Agent 的工具调用参数（Input）与执行结果（Output），实现极致的用户交互透明度。
 
 ---
 
-## 🏗️ 项目结构说明
+## 🏗️ 架构设计
+
+### 1. 后端逻辑流转图
+
+```mermaid
+graph TD
+    A[User Input] --> B{Call LLM Node}
+    B -->|Need Tools?| C[Tool Executor Node]
+    C --> B
+    B -->|Final Answer| D[End / Respond]
+    
+    subgraph Tools
+        T1[ChromaDB RAG]
+        T2[Tavily Web Search]
+        T3[System Time]
+    end
+    C --- T1 & T2 & T3
+
+```
+
+### 2. 技术栈清单
+
+* **LLM 引擎**: DeepSeek-V3 (兼容 OpenAI API 协议)
+* **Agent 框架**: LangGraph (LangChain 生态)
+* **后端服务**: FastAPI + Uvicorn (异步高并发)
+* **数据库**: ChromaDB (向量库) + SQLite (对话状态持久化)
+* **前端**: Vue 3 + Tailwind CSS + Markdown-it (流式渲染)
+
+---
+
+## 📂 项目结构剖析
 
 ```text
 .
-tongyi-agent-platform/
-├── backend/                # 后端代码 (FastAPI + LangGraph)
+├── backend/
 │   ├── app/
-│   │   ├── __init__.py
-│   │   ├── main.py         # 入口文件：配置CORS、流式路由
-│   │   ├── graph.py        # LangGraph 状态机定义
-│   │   ├── nodes.py        # 业务逻辑节点
-│   │   ├── state.py        # 状态定义
-│   │   ├── service.py      # 逻辑封装
-│   │   └── config.py       # 环境变量与模型配置
-│   ├── Dockerfile          # 容器化定义
-│   └── requirements.txt    # 依赖清单
-├── frontend/               # 前端代码 (Vue 3 + Vite + Tailwind)
-│   ├── src/
-│   │   ├── components/     # 聊天气泡、状态显示组件
-│   │   ├── App.vue         # 核心逻辑：SSE流式接收
-│   │   └── main.js
-│   ├── index.html
-│   ├── package.json
-│   └── tailwind.config.js
-└── docker-compose.yml      # 一键启动脚本
+│   │   ├── state.py      # 定义 AgentState，利用 operator.add 实现消息增量更新
+│   │   ├── graph.py      # 构建有向图拓扑结构，定义条件路由逻辑
+│   │   ├── nodes.py      # 核心节点逻辑：包含 RAG 检索、搜索、时间工具定义
+│   │   ├── service.py    # 数据库连接池与生命周期管理
+│   │   └── main.py       # SSE 异步流式接口，处理 [DONE] 标志位逻辑
+│   ├── data/             # 存放企业知识库原始文件
+│   └── ingest.py         # RAG 数据入库脚本，支持 PDF/TXT 切分与向量化
+├── frontend/             # Vue3 + Vite 构建的极客风 UI
+└── docker-compose.yml    # 一键部署前后端及挂载热更新目录
+
+```
+
+---
+
+## 🛠️ 快速部署与测试
+
+### 1. 准备环境
+
+克隆仓库并进入后端目录，配置环境变量：
+
+```bash
+# backend/.env
+DEEPSEEK_API_KEY=your_key_here
+TAVILY_API_KEY=your_key_here
+
+```
+
+### 2. 初始化知识库 (RAG)
+
+将内部文档（如 `knowledge.txt`）放入 `backend/data`，执行：
+
+```bash
+pip install -r requirements.txt
+python ingest.py
+
+```
+
+### 3. 一键启动 (Docker)
+
+```bash
+docker-compose up --build
+
+```
+
+* **前端地址**: `http://localhost:5173`
+* **后端接口**: `http://localhost:8000/docs`
+
+---
+
+## 🧠 深度思考
+
+* **消息冗余处理**：在流式输出中，利用 `processed_ids` 集合记录已推送的消息 ID，防止 LangGraph 状态机迭代中重复发送历史消息。
+* **优雅停机**：在 FastAPI 的 `shutdown` 事件中显式关闭 `aiosqlite` 连接，防止数据库文件锁死或数据损坏。
+* **响应式布局**：前端适配了多种分辨率，并通过 `nextTick` 实现了流式文本生成时的自动滚动触底优化。
+
+---
+
+## 👨‍💻 感悟 
+
+在开发本项目过程中，我深刻理解了 Agent 应用中**“状态管理”**的重要性。从最初的线性 Chain 升级到有环图（Graph）结构，使得模型在面对复杂查询时能通过多次自省（Self-correction）获取更精准的结果。同时，针对 **RAG 的 Chunk 大小优化** 和 **SSE 流式传输的稳定性** 做了大量调试，这提升了我处理全栈 AI 应用的综合能力。
+
