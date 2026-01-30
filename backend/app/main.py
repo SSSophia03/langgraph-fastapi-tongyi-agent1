@@ -18,7 +18,6 @@ app.add_middleware(
 
 assistant = AIAssistant()
 
-# [关键新增] 异步初始化生命周期钩子
 @app.on_event("startup")
 async def startup_event():
     await assistant.initialize()

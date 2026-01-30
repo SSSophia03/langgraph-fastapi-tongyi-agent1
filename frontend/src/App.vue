@@ -35,25 +35,20 @@
 
 <script setup>
 import { ref, onMounted, nextTick } from 'vue';
-// 导入 CSS (Vite 会自动处理)
 import './assets/main.css';
 
-// 导入组件
 import AppSidebar from './components/AppSidebar.vue';
 import AppHeader from './components/AppHeader.vue';
 import MessageItem from './components/MessageItem.vue';
 import ChatInput from './components/ChatInput.vue';
 
-// 导入逻辑
 import { useChat } from './composables/useChat';
 
 const { messages, isProcessing, currentThreadId, fetchHistory, sendMessage } = useChat();
 
-// UI 状态
 const isSidebarOpen = ref(true);
 const chatContainer = ref(null);
 
-// 滚动到底部工具函数
 const scrollToBottom = async () => {
   await nextTick();
   if (chatContainer.value) {

@@ -1,6 +1,5 @@
 <template>
   <div class="max-w-4xl mx-auto w-full group animate-fade-in-up">
-    
     <div v-if="msg.role === 'user'" class="flex justify-end pl-20">
       <div class="bg-white text-slate-900 px-5 py-3 rounded-2xl rounded-tr-sm shadow-xl text-sm font-bold leading-relaxed break-words">
         {{ msg.content }}
@@ -26,7 +25,7 @@
             </svg>
           </button>
           
-          <div v-show="msg.isThinkingExpanded" class="mt-3 ml-2 pl-4 border-l border-white/10 space-y-3 animate-fade-in-down">
+          <div v-show="msg.isThinkingExpanded" class="mt-3 ml-2 pl-4 border-l border-white/10 space-y-3">
             <div v-for="(step, sIndex) in msg.steps" :key="sIndex" class="bg-[#111] border border-white/5 rounded-lg p-3 text-[11px] font-mono">
               <div class="text-blue-400 mb-1 font-bold tracking-widest uppercase">{{ step.tool }}</div>
               <div class="text-gray-500 truncate mb-1">IN: {{ JSON.stringify(step.args) }}</div>
@@ -38,6 +37,11 @@
         <div v-if="msg.content" class="bg-[#151515] border border-white/5 rounded-2xl p-5 shadow-2xl">
           <div class="text-sm leading-7 text-gray-200 markdown-body break-words" v-html="renderedContent"></div>
         </div>
+        <div v-else-if="!msg.isThinkingCompleted" class="flex gap-1 items-center p-2">
+          <div class="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce"></div>
+          <div class="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce [animation-delay:0.2s]"></div>
+          <div class="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce [animation-delay:0.4s]"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -48,8 +52,10 @@ import { computed } from 'vue';
 import { renderMarkdown } from '../utils/markdown';
 
 const props = defineProps({
-  msg: Object
+  msg: { type: Object, required: true }
 });
 
-const renderedContent = computed(() => renderMarkdown(props.msg.content));
+const renderedContent = computed(() => {
+  return renderMarkdown(props.msg.content || '');
+});
 </script>

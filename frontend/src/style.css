@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 极客风滚动条 */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -27,7 +26,6 @@
   animation: fadeInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Markdown 样式增强 (仿 Notion/GitHub) */
 .prose h1 { @apply text-2xl font-bold mb-4 mt-6 text-slate-800; }
 .prose h2 { @apply text-xl font-bold mb-3 mt-5 text-slate-800; }
 .prose h3 { @apply text-lg font-bold mb-2 mt-4 text-slate-800; }

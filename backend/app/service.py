@@ -1,12 +1,12 @@
 import asyncio
-import aiosqlite # [新增] 直接使用 aiosqlite 库
+import aiosqlite 
 from langgraph.checkpoint.sqlite.aio import AsyncSqliteSaver
 from app.graph import build_async_graph
 
 class AIAssistant:
     def __init__(self):
         self._graph = None
-        self.conn = None # [修改] 保存原始数据库连接
+        self.conn = None 
 
     async def initialize(self):
         """显式创建连接并初始化数据库"""

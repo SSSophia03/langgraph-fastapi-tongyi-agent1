@@ -12,7 +12,7 @@ backend_dir = os.path.dirname(current_dir) # backend 目录
 load_dotenv(os.path.join(backend_dir, ".env"))
 load_dotenv(os.path.join(parent_dir, ".env"))
 
-# [修改] 读取 DeepSeek Key
+# 读取 DeepSeek Key
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
 
 if not DEEPSEEK_API_KEY:

@@ -94,11 +94,11 @@ def call_llm_node(state: AgentState):
         streaming=True
     )
     
-    # [关键] 绑定三大工具：时间 + 知识库 + 联网搜索
+    #  绑定三大工具：时间 + 知识库 + 联网搜索
     tools = [get_current_time, search_knowledge_base, perform_internet_search]
     llm_with_tools = llm.bind_tools(tools)
 
-    # [关键] 路由提示词 (Router Prompt)
+    #  路由提示词 (Router Prompt)
     prompt = ChatPromptTemplate.from_messages([
         (
             "system", 

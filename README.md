@@ -97,14 +97,12 @@ TAVILY_API_KEY=your_key_here
 ```bash
 pip install -r requirements.txt
 python ingest.py
-
 ```
 
 ### 3. 一键启动 (Docker)
 
 ```bash
 docker-compose up --build
-
 ```
 
 * **前端地址**: `http://localhost:5173`
@@ -119,8 +117,34 @@ docker-compose up --build
 * **响应式布局**：前端适配了多种分辨率，并通过 `nextTick` 实现了流式文本生成时的自动滚动触底优化。
 
 ---
+## 📸 运行效果展示 (Visual Demo)
 
+### 1. 核心对话与 RAG 检索链路
+项目实现了基于 DeepSeek 的流式对话，并集成实时企业知识库（RAG）检索。
+
+| 智能助手初始界面 | 知识库检索结果渲染 |
+| :---: | :---: |
+| ![初始界面](./2.png) | ![回复渲染](./5.png) |
+| *图 1：Agent 能力感知与欢迎语* | *图 2：Markdown 格式化后的检索回复* |
+
+### 2. 深度思考过程透明化 (Tool-Call Transparency)
+前端实时解析并展示 Agent 的工具调用逻辑（Tool Calls），支持查看完整的输入参数与检索片段。
+
+| 工具调用详情 (get_current_time) | 知识库原始片段详情 (RAG) |
+| :---: | :---: |
+| ![时间工具](./1.png) | ![知识库详情](./4.png) |
+| *图 3：实时系统时间获取过程* | *图 4：RAG 检索出的原始文档片段* |
+
+### 3. 异步高并发后端监控
+后端基于 FastAPI 异步框架，实现了稳定的流式 SSE 推送与数据库持久化。
+
+<div align="center">
+  <img src="./3.png" width="90%" />
+  <p><i>图 5：后端 Uvicorn 日志监控与 LLM 交互链路</i></p>
+</div>
+
+---
 ## 👨‍💻 感悟 
 
-在开发本项目过程中，我深刻理解了 Agent 应用中**“状态管理”**的重要性。从最初的线性 Chain 升级到有环图（Graph）结构，使得模型在面对复杂查询时能通过多次自省（Self-correction）获取更精准的结果。同时，针对 **RAG 的 Chunk 大小优化** 和 **SSE 流式传输的稳定性** 做了大量调试，这提升了我处理全栈 AI 应用的综合能力。
+在开发本项目过程中，我深刻理解了 Agent 应用中 **状态管理** 的重要性。从最初的线性 Chain 升级到有环图（Graph）结构，使得模型在面对复杂查询时能通过多次自省（Self-correction）获取更精准的结果。同时，针对 **RAG 的 Chunk 大小优化** 和 **SSE 流式传输的稳定性** 做了大量调试，这提升了我处理全栈 AI 应用的综合能力。
 
