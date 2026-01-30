@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 极客风滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* 消息淡入动画 */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up {
+  animation: fadeInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Markdown 样式增强 (仿 Notion/GitHub) */
+.prose h1 { @apply text-2xl font-bold mb-4 mt-6 text-slate-800; }
+.prose h2 { @apply text-xl font-bold mb-3 mt-5 text-slate-800; }
+.prose h3 { @apply text-lg font-bold mb-2 mt-4 text-slate-800; }
+.prose p { @apply mb-3 leading-relaxed text-slate-700; }
+.prose ul { @apply list-disc list-outside ml-5 mb-4 text-slate-700; }
+.prose ol { @apply list-decimal list-outside ml-5 mb-4 text-slate-700; }
+.prose a { @apply text-blue-600 hover:underline; }
+.prose code { 
+  @apply font-mono text-sm bg-slate-100 px-1.5 py-0.5 rounded text-pink-600 border border-slate-200; 
+}
+.prose pre { 
+  @apply bg-slate-900 text-slate-50 p-4 rounded-lg overflow-x-auto mb-4 border border-slate-700 shadow-sm; 
+}
+.prose pre code { 
+  @apply bg-transparent text-inherit p-0 border-none text-xs; 
+}
+.prose blockquote { 
+  @apply border-l-4 border-blue-500 pl-4 italic text-slate-500 bg-slate-50 py-2 rounded-r my-4; 
+}
+.prose table { 
+  @apply w-full border-collapse mb-4 text-sm; 
+}
+.prose th { 
+  @apply bg-slate-100 border border-slate-200 p-2 text-left font-semibold text-slate-700; 
+}
+.prose td { 
+  @apply border border-slate-200 p-2 text-slate-600; 
+}
+
+/* 时间轴连接线动画 */
+.timeline-connector::before {
+  content: '';
+  @apply absolute left-[15px] top-8 bottom-0 w-0.5 bg-slate-200;
+}
+.timeline-item:last-child .timeline-connector::before {
+  display: none;
+}

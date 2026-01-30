@@ -1,1 +1,32 @@
-.env 
+.env
+.env.local
+*.key
+*.pem
+secrets.yaml
+
+# --- Python 后端 ---
+backend/venv/
+backend/__pycache__/
+*.pyc
+.pytest_cache/
+
+# --- 数据库 & 本地存储 ---
+# 聊天记录都在这里
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+backend/checkpoints.sqlite
+# RAG 向量库
+backend/chroma_db/
+
+# --- Node.js 前端 ---
+node_modules/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+
+# --- IDE 配置 (可选) ---
+.vscode/
+.idea/
